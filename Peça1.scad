@@ -1,47 +1,52 @@
 use <Parafuso.scad>
 use <Porca.scad>
-module Peca1(){
+
+module Shape(){
 $fs=0.04; 
-difference(){
-{linear_extrude(height=1.7){hull(){
-translate([27/2-6,0,0])circle(d=27);
-translate([70+6-27/2,0,0])circle(d=27);
+translate([0,0,1.7/2-.01])minkowski(){
+linear_extrude(height=.01){
+
+hull(){
+translate([27/2-6,0,0])circle(d=27-1.7);
+translate([70+6-27/2,0,0])circle(d=27-1.7);
 }
 }
+sphere(d=1.7);
 }
-translate([0,0,-25+1.7])parafuso(3.5,25-1.7,6,1.7);
-translate([70,0,-25+1.7])parafuso(3.5,25-1.7,6,1.7);
+}
+module Clip2d(){
+    $fs=0.04; 
+    difference(){ 
+        union(){
+            translate([0,2,0])circle(d=4);
+            square([4,4/2]);
+            polygon(points=[[0,0],[0,4],[-45,0.4+.5],[-50,1.4+.2],[-50,0]]);
+        }
+        translate([0,2,0])circle(d=3.99);
+        translate([4,2,0])circle(d=3.99);
+        polygon(points=[[0,0],[0,3.99],[-45,0.399+.5],[-50,1.38+.2],[-50,0]]);
+    }    
 }
 
-
+module Clip(){
+     $fs=0.04; 
 minkowski(){
-translate([60,+15/2,1.7])rotate([90,0,0])linear_extrude(height=15){
-union(){
-translate([4,0,0])difference(){
-translate([0,1.5,0])circle(d=4.01);
-translate([0,1.5,0])circle(d=3.99);
-translate([0,-1,0])square([5,5]);
-translate([-2.5,1.5,0])square([5,5]);
+    translate([10,-15/2,1.7-.5])rotate([90,0,180])linear_extrude(height=15)Clip2d();
+     sphere(d=1);
 }
+}
+
+module Peca1(){
 difference(){
-translate([0,1.5,0])circle(d=4.01);
-translate([0,1.5,0])circle(d=3.99);
-translate([-5,-1,0])square([5,5]);
-}
-difference(){
-polygon(points=[[0,0],[0,3.51],[-45,0.4+.51]]);
-polygon(points=[[0,0],[0,3.49],[-45,0.4+0.49]]);
-}
-polygon(points=[[-45-.01,0.4+.51],[-45-.01,0.4+0.49],[-50,.4+.49+.7]]);
-}
-}
-sphere(d=1);
-}
+    union(){
+        Shape();
+        Clip();
+    }
+    translate([0,0,-25+1.7])parafuso(3.5,25-1.7,6,1.7);
+    translate([70,0,-25+1.7])parafuso(3.5,25-1.7,6,1.7);
 
-
-
+    }
 }
-
 
 module Peca2(){
 $fs=0.04; 

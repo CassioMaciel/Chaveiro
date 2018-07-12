@@ -14,8 +14,8 @@ translate([70,0,0])rotate([0,0,180+rotacao])translate([-4,0,0])import("ChaveAp.s
 }
 /*Fim das Chaves*/
 
-
-
 /*Peça 1*/
 color([0,0,0,1])translate([0,0,2+2+2])Peca1();
+
+
 translate([0,0,-2])Peca2();
